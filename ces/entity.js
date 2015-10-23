@@ -5,8 +5,9 @@ import Signal from '../core/signal';
 var ENTITY_ID = 0;
 
 class Entity {
-    constructor() {
+    constructor(name) {
        this.id = ++ENTITY_ID;
+       this.name = name;
 
        this.components = new Map();
 
