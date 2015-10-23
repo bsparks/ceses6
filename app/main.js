@@ -1,27 +1,54 @@
 'use strict';
 
-import World from '../ces/world';
-import SomeSystem from './game/something';
-import Component from '../ces/component';
-import {LinkedList} from '../core/linkedList';
-import timing from './timing';
-import Entity from '../ces/entity';
+import THREE from 'three';
 
-var test = window.test = new LinkedList();
-test.add({ a: 1, b: 2 });
-test.add({ b: 33, c: 'dong' });
+import {World, Entity, Component} from '../ces/ces';
+
+import SomeSystem from './game/something';
+import timing from './timing';
+
+window.THREE = THREE;
 
 window.foo = new Component({ test: 'abc', bar: 1, twingle: [1, 2, 3] });
 
 var world = window.world = new World();
+
+var scene, renderer, camera;
+
+scene = new THREE.Scene();
+world.scene = scene;
+
+camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+camera.position.z = 1000;
+
+renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+document.body.appendChild(renderer.domElement);
+
 world.addSystem(new SomeSystem());
 
 var e1 = new Entity();
-e1.addComponent('position', {x: 1, y: 0, z: 0});
+e1.addComponent('transform', {
+    position: new THREE.Vector3(),
+    rotation: new THREE.Vector3(),
+    scale: new THREE.Vector3()
+});
 var e2 = new Entity();
-e2.addComponent('position', {x: 0, y: 23, z: 387});
+e2.addComponent('transform', {
+    position: new THREE.Vector3(),
+    rotation: new THREE.Vector3(),
+    scale: new THREE.Vector3()
+});
 var e3 = new Entity();
-e3.addComponent('ghostId', {id: 'blah'});
+e3.addComponent('ghostId', { id: 'blah' });
+e3.addComponent('transform', {
+    position: new THREE.Vector3(),
+    rotation: new THREE.Vector3(),
+    scale: new THREE.Vector3()
+});
+e3.addComponent('primitive');
+e3.addComponent('spins');
 
 world.addEntities(e1, e2, e3);
 
@@ -38,6 +65,9 @@ function loop() {
     last = current;
 
     world.update(delta);
+
+    renderer.render(scene, camera);
 }
 
 loop();
+
