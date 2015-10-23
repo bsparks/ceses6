@@ -24,6 +24,15 @@ class World {
         entity.onComponentRemoved.add(() => this.updateFamilies(entity));
     }
 
+    removeEntity(entity) {
+        this.entities.remove(entity);
+        entity.destroy();
+
+        for(let family of this.families.values()) {
+            family.removeEntity(entity);
+        }
+    }
+
     addEntities(...entities) {
         for (let entity of entities) {
             this.addEntity(entity);

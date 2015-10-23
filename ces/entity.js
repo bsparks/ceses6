@@ -39,6 +39,12 @@ class Entity {
     getComponent(componentName) {
         return this.components.get(componentName) || null;
     }
+
+    destroy() {
+        this.onComponentAdded.clear();
+        this.onComponentRemoved.clear();
+        //this.components.clear();
+    }
 }
 
 export default Entity;
