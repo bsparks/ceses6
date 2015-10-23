@@ -98,7 +98,7 @@ class List {
         return Array.from(this);
     }
 
-    forEach(callback, reversed) {
+    forEach(callback, reversed = false) {
         for (let node of this.nodes(reversed)) {
             if (callback(node.data) === false) {
                 break;
@@ -106,7 +106,7 @@ class List {
         }
     }
 
-    *nodes(reversed) {
+    *nodes(reversed = false) {
         var node = reversed ? this.tail : this.head;
         while (node) {
             yield node;

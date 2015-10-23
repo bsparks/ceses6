@@ -8,8 +8,8 @@ import timing from './timing';
 import Entity from '../ces/entity';
 
 var test = window.test = new LinkedList();
-test.add({a:1,b:2});
-test.add({b:33,c:'dong'});
+test.add({ a: 1, b: 2 });
+test.add({ b: 33, c: 'dong' });
 
 window.foo = new Component({ test: 'abc', bar: 1, twingle: [1, 2, 3] });
 
@@ -21,17 +21,17 @@ world.entities.add(new Entity());
 
 var last = 0;
 function loop() {
-	requestAnimationFrame(loop);
-	
-	let current = performance.now();
-	let delta = current - last;
-	
-	timing.elapsed += delta;
-	timing.frameTime = delta;
-	
-	last = current;
-	
-	world.update(delta);
+    requestAnimationFrame(loop);
+
+    let current = performance.now();
+    let delta = current - last;
+
+    timing.elapsed += delta;
+    timing.frameTime = delta;
+
+    last = current;
+
+    world.update(delta);
 }
 
 loop();
