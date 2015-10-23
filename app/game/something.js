@@ -3,10 +3,19 @@
 import System from '../../ces/system';
 
 class SomeSystem extends System {
-    test = 0;
+    constructor() {
+        super();
+
+        this.test = 0;
+    }
 
     update(dt) {
         super.update(dt);
+
+        let family = this.world.getFamily('position');
+        family.forEach(function(entity) {
+            entity.getComponent('position').x += 0.5 * dt;
+        });
 
         this.test++;
     }

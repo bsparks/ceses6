@@ -5,6 +5,10 @@ import Entity from './entity';
 import Signal from '../core/signal';
 
 class Family {
+    static getId(...traits) {
+        return traits.join(',');
+    }
+
     constructor(...traits) {
         this._anyOfComponents = [];
         this._allOfComponents = [];

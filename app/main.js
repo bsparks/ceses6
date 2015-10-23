@@ -16,8 +16,14 @@ window.foo = new Component({ test: 'abc', bar: 1, twingle: [1, 2, 3] });
 var world = window.world = new World();
 world.addSystem(new SomeSystem());
 
-world.entities.add(new Entity());
-world.entities.add(new Entity());
+var e1 = new Entity();
+e1.addComponent('position', {x: 1, y: 0, z: 0});
+var e2 = new Entity();
+e2.addComponent('position', {x: 0, y: 23, z: 387});
+var e3 = new Entity();
+e3.addComponent('ghostId', {id: 'blah'});
+
+world.addEntities(e1, e2, e3);
 
 var last = 0;
 function loop() {
