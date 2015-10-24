@@ -13,8 +13,9 @@ class Serializable {
         this._serializeWhiteList.add(prop);
     }
 
-    serialize() {
-        return JSON.stringify(this, Array.from(this._serializeWhiteList));
+    toJSON() {
+        let copy = Object.assign({}, this);
+        return JSON.stringify(copy, Array.from(this._serializeWhiteList));
     }
 }
 
