@@ -15,6 +15,7 @@ class SceneManager extends System {
         world.onEntityAdded('sceneObject').add((entity) => {
             let sceneObject = entity.getComponent('sceneObject').obj;
             if (sceneObject) {
+                this.scene.add(sceneObject);
                 sceneObject.addEventListener('removed', function() {
                     entity.getComponent('sceneObject').obj = null;
                     entity.removeComponent('sceneObject');

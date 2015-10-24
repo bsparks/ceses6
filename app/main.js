@@ -7,7 +7,8 @@ import {World, Entity, Component} from '../ces/ces';
 import SomeSystem from './game/something';
 import timing from './timing';
 
-import SceneManager from '../graphics/sceneManager';
+import SceneManager from '../engine/sceneManager';
+import {LightSystem, LightComponent} from '../engine/light';
 
 window.THREE = THREE;
 
@@ -18,15 +19,9 @@ var world = window.world = new World();
 var scene, renderer, camera;
 
 scene = new THREE.Scene();
-world.scene = scene;
 
 camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
 camera.position.z = 1000;
-
-var light = new THREE.PointLight(0xffffff, 0.8);
-scene.add(light);
-
-scene.add(new THREE.AmbientLight(0x404040));
 
 renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -34,6 +29,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 world.addSystem(new SomeSystem());
+world.addSystem(new LightSystem());
 world.addSystem(new SceneManager(scene));
 
 var e1 = new Entity();
@@ -60,7 +56,13 @@ e3.addComponent('transform', {
 e3.addComponent('primitive');
 e3.addComponent('spins');
 
-world.addEntities(e1, e2, e3);
+var lightEntity = new Entity('light1');
+lightEntity.addComponent('light', new LightComponent({intensity: 0.8}));
+
+var ambientLighting = new Entity('ambientLight');
+ambientLighting.addComponent('light', new LightComponent({lightType: 'AmbientLight', color: 0x404040}));
+
+world.addEntities(e1, e2, e3, lightEntity, ambientLighting);
 
 var last = 0;
 function loop() {

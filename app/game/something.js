@@ -13,8 +13,6 @@ class SomeSystem extends System {
             var mesh = new THREE.Mesh(geometry, material);
 
             entity.addComponent('sceneObject', {obj: mesh});
-
-            world.scene.add(mesh);
         });
     }
 
