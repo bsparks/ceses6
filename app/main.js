@@ -14,6 +14,10 @@ import {assetCache} from './preload';
 
 import '../engine/objLoader';
 
+import {MeshCache} from '../engine/modelLoaderPlugin';
+
+window.meshes = MeshCache;
+
 async function initGame() {
     var assets = await assetCache;
 

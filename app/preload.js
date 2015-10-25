@@ -2,12 +2,15 @@
 
 import 'preloadjs';
 
+import {OBJLoaderPlugin} from '../engine/modelLoaderPlugin';
+
 var promise = new Promise(function(resolve, reject) {
     var preload = new createjs.LoadQueue(true);
     var assets = [
         {id: 'crateModel', src: '/app/assets/crate_mesh.obj', type: createjs.AbstractLoader.TEXT},
         {id: 'crateMaterial', src: '/app/assets/crate_diff.png'}
     ];
+    preload.installPlugin(new OBJLoaderPlugin());
     preload.on('complete', function() {
         resolve(preload);
     });
