@@ -1,6 +1,7 @@
 {
   "jspm": {
     "dependencies": {
+      "createjs/preloadjs": "github:createjs/preloadjs@^0.6.1",
       "three": "github:mrdoob/three.js@master"
     },
     "devDependencies": {

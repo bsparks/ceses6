@@ -18,6 +18,7 @@ System.config({
     "babel": "npm:babel-core@5.8.25",
     "babel-runtime": "npm:babel-runtime@5.8.25",
     "core-js": "npm:core-js@1.2.1",
+    "preloadjs": "github:createjs/preloadjs@0.6.1",
     "three": "github:mrdoob/three.js@master",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"

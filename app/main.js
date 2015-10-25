@@ -10,7 +10,12 @@ import timing from './timing';
 import SceneManager from '../engine/sceneManager';
 import {LightSystem, LightComponent} from '../engine/light';
 
+import {preload as assetCache} from './preload';
+
 window.THREE = THREE;
+window.assetCache = assetCache;
+import '../engine/objLoader';
+window.objLoader = new THREE.OBJLoader();
 
 window.foo = new Component({ test: 'abc', bar: 1, twingle: [1, 2, 3] });
 
