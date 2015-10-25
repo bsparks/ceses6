@@ -17,6 +17,7 @@ class OBJLoaderPlugin {
 
     preloadHandler(loadItem, queue) {
         console.log('obj loader plugin', loadItem);
+        loadItem.type = 'text';
         loadItem.completeHandler = this.onComplete.bind(this);
 
         return true;

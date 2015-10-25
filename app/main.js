@@ -2,35 +2,29 @@
 
 import THREE from 'three';
 
-import {World, Entity, Component} from '../ces/ces';
+import {Entity} from '../ces/ces';
 
 import SomeSystem from './game/something';
-import timing from './timing';
-
 import SceneManager from '../engine/sceneManager';
 import {LightSystem, LightComponent} from '../engine/light';
 
-import {assetCache} from './preload';
-
 import '../engine/objLoader';
 
-import {MeshCache} from '../engine/modelLoaderPlugin';
+// need to register the assets needed for preload first
+import './preload';
 
-window.meshes = MeshCache;
+import {default as assetMgr} from '../game/assetManager';
 
 import world from '../game/world';
 import scene from '../game/rootScene';
 import camera from '../game/mainCamera';
-import renderer from '../game/renderer';
+import loop from '../game/loop';
 
 // debugging...
 window.world = world;
 
 async function initGame() {
-    var assets = await assetCache;
-
-    window.THREE = THREE;
-    window.assets = assets;
+    var assets = await assetMgr.load();
 
     var objLoader = new THREE.OBJLoader();
     var parsed = objLoader.parse(assets.getResult('crateModel'));
@@ -88,23 +82,6 @@ async function initGame() {
     ambientLighting.addComponent('light', new LightComponent({ lightType: 'AmbientLight', color: 0x404040 }));
 
     world.addEntities(e1, e2, e3, lightEntity, ambientLighting);
-
-    var last = 0;
-    function loop() {
-        requestAnimationFrame(loop);
-
-        let current = performance.now();
-        let delta = current - last;
-
-        timing.elapsed += delta;
-        timing.frameTime = delta;
-
-        last = current;
-
-        world.update(delta);
-
-        renderer.render(scene, camera);
-    }
 
     loop();
 }
