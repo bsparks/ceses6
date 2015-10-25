@@ -18,6 +18,14 @@ import {MeshCache} from '../engine/modelLoaderPlugin';
 
 window.meshes = MeshCache;
 
+import world from '../game/world';
+import scene from '../game/rootScene';
+import camera from '../game/mainCamera';
+import renderer from '../game/renderer';
+
+// debugging...
+window.world = world;
+
 async function initGame() {
     var assets = await assetCache;
 
@@ -40,19 +48,7 @@ async function initGame() {
     } );
     var crateMesh = new THREE.Mesh(crateGeo, crateMat);
 
-    var world = window.world = new World();
-
-    var scene, renderer, camera;
-
-    scene = new THREE.Scene();
-
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
     camera.position.z = 1000;
-
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
-    document.body.appendChild(renderer.domElement);
 
     world.addSystem(new SomeSystem());
     world.addSystem(new LightSystem());
@@ -60,7 +56,7 @@ async function initGame() {
 
     var e1 = new Entity('crate');
     e1.addComponent('transform', {
-        position: new THREE.Vector3(-300, 300, 0),
+        position: new THREE.Vector3(-150, 200, 0),
         rotation: new THREE.Vector3(),
         scale: new THREE.Vector3(8, 8, 8)
     });
