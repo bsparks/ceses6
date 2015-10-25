@@ -54,7 +54,7 @@ async function initGame() {
     world.addSystem(new LightSystem());
     world.addSystem(new SceneManager(scene));
 
-    var e1 = new Entity();
+    var e1 = new Entity('crate');
     e1.addComponent('transform', {
         position: new THREE.Vector3(-300, 300, 0),
         rotation: new THREE.Vector3(),

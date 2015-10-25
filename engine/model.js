@@ -1,7 +1,6 @@
 'use strict';
 
 import {Component, System} from '../ces/ces';
-import '../engine/objLoader';
 
 const COMPONENT_DEFAULTS = {
     asset: ''
@@ -19,6 +18,7 @@ class ModelSystem extends System {
 
         world.onEntityAdded('model').add(function(entity) {
             var modelData = entity.getComponent('model');
+            // clone existing mesh, asset should point to a cached THREE.Mesh inside an asset mgr
         });
     }
 }
