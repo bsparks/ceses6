@@ -10,81 +10,103 @@ import timing from './timing';
 import SceneManager from '../engine/sceneManager';
 import {LightSystem, LightComponent} from '../engine/light';
 
-import {preload as assetCache} from './preload';
+import {assetCache} from './preload';
 
-window.THREE = THREE;
-window.assetCache = assetCache;
 import '../engine/objLoader';
-window.objLoader = new THREE.OBJLoader();
 
-window.foo = new Component({ test: 'abc', bar: 1, twingle: [1, 2, 3] });
+async function initGame() {
+    var assets = await assetCache;
 
-var world = window.world = new World();
+    window.THREE = THREE;
+    window.assets = assets;
 
-var scene, renderer, camera;
+    var objLoader = new THREE.OBJLoader();
+    var parsed = objLoader.parse(assets.getResult('crateModel'));
+    window.parsed = parsed;
+    var crateGeo = parsed.children[0].geometry;
+    var crateTex = new THREE.Texture(assets.getResult('crateMaterial'), THREE.UVMapping );
+    crateTex.needsUpdate = true;
+    var crateMat = new THREE.MeshPhongMaterial( {
+        color: 0xffffff,
+        specular: 0x000000,
+        opacity: 0.4,
+        transparent: false,
+        map: crateTex,
+        shading: THREE.SmoothShading
+    } );
+    var crateMesh = new THREE.Mesh(crateGeo, crateMat);
 
-scene = new THREE.Scene();
+    var world = window.world = new World();
 
-camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
-camera.position.z = 1000;
+    var scene, renderer, camera;
 
-renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
+    scene = new THREE.Scene();
 
-document.body.appendChild(renderer.domElement);
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+    camera.position.z = 1000;
 
-world.addSystem(new SomeSystem());
-world.addSystem(new LightSystem());
-world.addSystem(new SceneManager(scene));
+    renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
-var e1 = new Entity();
-e1.addComponent('transform', {
-    position: new THREE.Vector3(),
-    rotation: new THREE.Vector3(),
-    scale: new THREE.Vector3(1, 1, 1)
-});
-var e2 = new Entity();
-e2.addComponent('transform', {
-    position: new THREE.Vector3(-300, 0, 0),
-    rotation: new THREE.Vector3(),
-    scale: new THREE.Vector3(1, 1, 1)
-});
-e2.addComponent('primitive');
-e2.addComponent('spins');
-var e3 = new Entity();
-e3.addComponent('ghostId', { id: 'blah' });
-e3.addComponent('transform', {
-    position: new THREE.Vector3(300, 0, 0),
-    rotation: new THREE.Vector3(),
-    scale: new THREE.Vector3(1, 1, 1)
-});
-e3.addComponent('primitive');
-e3.addComponent('spins');
+    document.body.appendChild(renderer.domElement);
 
-var lightEntity = new Entity('light1');
-lightEntity.addComponent('light', new LightComponent({intensity: 0.8}));
+    world.addSystem(new SomeSystem());
+    world.addSystem(new LightSystem());
+    world.addSystem(new SceneManager(scene));
 
-var ambientLighting = new Entity('ambientLight');
-ambientLighting.addComponent('light', new LightComponent({lightType: 'AmbientLight', color: 0x404040}));
+    var e1 = new Entity();
+    e1.addComponent('transform', {
+        position: new THREE.Vector3(-300, 300, 0),
+        rotation: new THREE.Vector3(),
+        scale: new THREE.Vector3(8, 8, 8)
+    });
+    e1.addComponent('spins');
+    e1.addComponent('sceneObject', {obj: crateMesh});
 
-world.addEntities(e1, e2, e3, lightEntity, ambientLighting);
+    var e2 = new Entity();
+    e2.addComponent('transform', {
+        position: new THREE.Vector3(-300, 0, 0),
+        rotation: new THREE.Vector3(),
+        scale: new THREE.Vector3(1, 1, 1)
+    });
+    e2.addComponent('primitive');
+    e2.addComponent('spins');
+    var e3 = new Entity();
+    e3.addComponent('ghostId', { id: 'blah' });
+    e3.addComponent('transform', {
+        position: new THREE.Vector3(300, 0, 0),
+        rotation: new THREE.Vector3(),
+        scale: new THREE.Vector3(1, 1, 1)
+    });
+    e3.addComponent('primitive');
+    e3.addComponent('spins');
 
-var last = 0;
-function loop() {
-    requestAnimationFrame(loop);
+    var lightEntity = new Entity('light1');
+    lightEntity.addComponent('light', new LightComponent({ intensity: 0.8 }));
 
-    let current = performance.now();
-    let delta = current - last;
+    var ambientLighting = new Entity('ambientLight');
+    ambientLighting.addComponent('light', new LightComponent({ lightType: 'AmbientLight', color: 0x404040 }));
 
-    timing.elapsed += delta;
-    timing.frameTime = delta;
+    world.addEntities(e1, e2, e3, lightEntity, ambientLighting);
 
-    last = current;
+    var last = 0;
+    function loop() {
+        requestAnimationFrame(loop);
 
-    world.update(delta);
+        let current = performance.now();
+        let delta = current - last;
 
-    renderer.render(scene, camera);
+        timing.elapsed += delta;
+        timing.frameTime = delta;
+
+        last = current;
+
+        world.update(delta);
+
+        renderer.render(scene, camera);
+    }
+
+    loop();
 }
 
-loop();
-
+initGame();
