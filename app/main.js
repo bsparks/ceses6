@@ -8,7 +8,7 @@ import SomeSystem from './game/something';
 import SceneManager from '../engine/sceneManager';
 import {LightSystem, LightComponent} from '../engine/light';
 
-import '../engine/objLoader';
+import '../engine/assets/objLoader';
 
 // need to register the assets needed for preload first
 import './preload';

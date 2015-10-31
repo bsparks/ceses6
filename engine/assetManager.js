@@ -1,7 +1,7 @@
 'use strict';
 
 import 'preloadjs';
-import {OBJLoaderPlugin} from './modelLoaderPlugin';
+import {OBJLoaderPlugin} from './assets/modelLoaderPlugin';
 
 var createjs = window.createjs;
 
