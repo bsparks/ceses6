@@ -2,9 +2,9 @@
 
 import THREE from 'three';
 import './objLoader';
+import meshCache from './meshCache';
 
-var meshCache = new Map();
-
+var objCache = new Map();
 var objLoader = new THREE.OBJLoader();
 
 class OBJLoaderPlugin {
@@ -17,6 +17,7 @@ class OBJLoaderPlugin {
 
     preloadHandler(loadItem, queue) {
         console.log('obj loader plugin', loadItem);
+        // TODO: test cache
         loadItem.type = 'text';
         loadItem.completeHandler = this.onComplete.bind(this);
 
@@ -26,8 +27,9 @@ class OBJLoaderPlugin {
     onComplete(event) {
         console.log('completed: ', event);
         let parsed = objLoader.parse(event.result);
-        meshCache.set(event.item.src, parsed);
+        objCache.set(event.item.src, parsed);
+        meshCache.set(event.item.id, parsed);
     }
 }
 
-export {OBJLoaderPlugin, meshCache as MeshCache};
+export {OBJLoaderPlugin, objCache};

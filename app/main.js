@@ -7,6 +7,7 @@ import {Entity} from '../ces/ces';
 import SomeSystem from './game/something';
 import SceneManager from '../engine/sceneManager';
 import {LightSystem, LightComponent} from '../engine/light';
+import {ModelComponent, ModelSystem} from '../engine/model';
 
 import '../engine/assets/objLoader';
 
@@ -26,7 +27,7 @@ window.world = world;
 async function initGame() {
     var assets = await assetMgr.load();
 
-    var objLoader = new THREE.OBJLoader();
+    /*var objLoader = new THREE.OBJLoader();
     var parsed = objLoader.parse(assets.getResult('crateModel'));
     window.parsed = parsed;
     var crateGeo = parsed.children[0].geometry;
@@ -40,12 +41,13 @@ async function initGame() {
         map: crateTex,
         shading: THREE.SmoothShading
     } );
-    var crateMesh = new THREE.Mesh(crateGeo, crateMat);
+    var crateMesh = new THREE.Mesh(crateGeo, crateMat);*/
 
     camera.position.z = 1000;
 
     world.addSystem(new SomeSystem());
     world.addSystem(new LightSystem());
+    world.addSystem(new ModelSystem());
     world.addSystem(new SceneManager(scene));
 
     var e1 = new Entity('crate');
@@ -55,7 +57,8 @@ async function initGame() {
         scale: new THREE.Vector3(8, 8, 8)
     });
     e1.addComponent('spins');
-    e1.addComponent('sceneObject', {obj: crateMesh});
+    e1.addComponent('model', {asset: 'crateModel', material: 'crateMaterial'});
+    //e1.addComponent('sceneObject', {obj: crateMesh});
 
     var e2 = new Entity();
     e2.addComponent('transform', {
