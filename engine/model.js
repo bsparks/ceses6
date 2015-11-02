@@ -27,8 +27,10 @@ class ModelSystem extends System {
 
                 if (materialCache.has(modelData.material)) {
                     let material = materialCache.get(modelData.material);
-                    model.material = material.clone();
-                    model.material.needsUpdate = true;
+                    //console.log('change mat: ', material, model);
+                    // in the case of the obj loader, we'll have a object3d wrapper, assume only one child object for now
+                    model.children[0].material = material.clone();
+                    //model.material.needsUpdate = true;
                 }
 
                 if (entity.components.has('sceneObject')) {
